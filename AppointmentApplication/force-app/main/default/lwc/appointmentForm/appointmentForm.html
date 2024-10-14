@@ -1,0 +1,65 @@
+<template>
+
+    <article class="slds-card">
+        <div class="slds-card__header slds-grid">
+            <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                <div class="slds-media__body">
+                    <h2 class="slds-card__header-title" title="Appointment Form">
+                        Appointment Form
+                    </h2>
+                </div>
+            </header>
+        </div>
+
+        <div class="slds-card__body slds-card__body_inner">
+            <div class="slds-grid slds-wrap slds-gutters">
+                <!-- First Column -->
+                <div class="slds-col slds-size_1-of-2" if:true={showRecordPicker}>
+                    <lightning-record-picker label="Contacts" name="Contact__c" placeholder="Search Contacts..."
+                        object-api-name="Contact" required onchange={handleInputChange}  value={contactValue}>
+                    </lightning-record-picker>
+                </div>
+
+                <!-- Second Column -->
+                <div class="slds-col slds-size_1-of-2">
+                    <lightning-input name="Subject__c" label="Subject" type="text" required
+                        onchange={handleInputChange}>
+                    </lightning-input>
+                </div>
+
+                <!-- First Column for Date -->
+                <div class="slds-col slds-size_1-of-2">
+                    <lightning-input name="Appointment_Date__c" label="Appointment Date" type="date" required
+                        onchange={handleInputChange}>
+                    </lightning-input>
+                </div>
+
+                <!-- Second Column for Time -->
+                <div class="slds-col slds-size_1-of-2">
+                    <lightning-input name="Appointment_Time__c" label="Appointment Time" type="time" required
+                        onchange={handleInputChange}>
+                    </lightning-input>
+                </div>
+
+                <!-- Full Width Column for Description -->
+                <div class="slds-col slds-size_1-of-1">
+                    <lightning-textarea name="Description__c" label="Description" required onchange={handleInputChange}>
+                    </lightning-textarea>
+                </div>
+
+                <!-- Loading Spinner Full Width -->
+                <template if:true={isLoading}>
+                    <div class="slds-col slds-size_1-of-1">
+                        <lightning-spinner alternative-text="Loading" size="small"></lightning-spinner>
+                    </div>
+                </template>
+            </div>
+        </div>
+
+
+        <footer class="slds-card__footer">
+            <lightning-button label="Submit" variant="brand" onclick={handleSubmit} class="slds-m-top_medium "
+                disabled={isLoading}></lightning-button>
+        </footer>
+    </article>
+</template>
