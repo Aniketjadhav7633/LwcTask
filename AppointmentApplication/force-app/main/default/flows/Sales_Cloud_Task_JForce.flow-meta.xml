@@ -5,7 +5,7 @@
         <name>Order_Total_and_Opportunity_Amount_do_not_match</name>
         <label>Order Total and Opportunity Amount do not match</label>
         <locationX>182</locationX>
-        <locationY>1487</locationY>
+        <locationY>1595</locationY>
         <actionName>emailSimple</actionName>
         <actionType>emailSimple</actionType>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
@@ -36,7 +36,7 @@
         <name>Accumulate_the_Total</name>
         <label>Accumulate the Total</label>
         <locationX>138</locationX>
-        <locationY>971</locationY>
+        <locationY>1079</locationY>
         <assignmentItems>
             <assignToReference>TotalOrderAmount</assignToReference>
             <operator>Add</operator>
@@ -52,7 +52,7 @@
         <name>Create_Order_Line_Item</name>
         <label>Create Order Line Item</label>
         <locationX>138</locationX>
-        <locationY>863</locationY>
+        <locationY>971</locationY>
         <assignmentItems>
             <assignToReference>OrderLineItemRecord.Quantity</assignToReference>
             <operator>Assign</operator>
@@ -96,7 +96,7 @@
         <name>Creation_OrderLineItemsCollection</name>
         <label>Creation OrderLineItemsCollection</label>
         <locationX>138</locationX>
-        <locationY>1079</locationY>
+        <locationY>1187</locationY>
         <assignmentItems>
             <assignToReference>OrderLineItemsCollection</assignToReference>
             <operator>Add</operator>
@@ -111,17 +111,17 @@
     <decisions>
         <name>Check_for_Synced_Quote</name>
         <label>Check for Synced Quote</label>
-        <locationX>248</locationX>
+        <locationX>479</locationX>
         <locationY>323</locationY>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
             <name>Outcome_1_Yes</name>
             <conditionLogic>and</conditionLogic>
             <conditions>
-                <leftValueReference>$Record.SyncedQuote.Id</leftValueReference>
-                <operator>IsNull</operator>
+                <leftValueReference>$Record.SyncedQuoteId</leftValueReference>
+                <operator>NotEqualTo</operator>
                 <rightValue>
-                    <booleanValue>false</booleanValue>
+                    <stringValue></stringValue>
                 </rightValue>
             </conditions>
             <connector>
@@ -131,10 +131,32 @@
         </rules>
     </decisions>
     <decisions>
+        <name>is_Contarct_Availble</name>
+        <label>is Contarct Availble</label>
+        <locationX>248</locationX>
+        <locationY>539</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Yes</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Contract_Id.Id</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Create_Order</targetReference>
+            </connector>
+            <label>Yes</label>
+        </rules>
+    </decisions>
+    <decisions>
         <name>Validate_Order_Total_Matches_Opportunity</name>
         <label>Validate Order Total Matches Opportunity.</label>
         <locationX>50</locationX>
-        <locationY>1379</locationY>
+        <locationY>1487</locationY>
         <defaultConnector>
             <targetReference>Order_Total_and_Opportunity_Amount_do_not_match</targetReference>
         </defaultConnector>
@@ -165,7 +187,7 @@
         <name>Loop_Through_Line_Items</name>
         <label>Loop Through Line Items</label>
         <locationX>50</locationX>
-        <locationY>755</locationY>
+        <locationY>863</locationY>
         <collectionReference>Get_Opportunity_Line_Items</collectionReference>
         <iterationOrder>Asc</iterationOrder>
         <nextValueConnector>
@@ -198,7 +220,7 @@
         <name>Create_bulk_OrderLineItems</name>
         <label>Create bulk  OrderLineItems</label>
         <locationX>50</locationX>
-        <locationY>1271</locationY>
+        <locationY>1379</locationY>
         <connector>
             <targetReference>Validate_Order_Total_Matches_Opportunity</targetReference>
         </connector>
@@ -208,7 +230,7 @@
         <name>Create_Order</name>
         <label>Create Order</label>
         <locationX>50</locationX>
-        <locationY>539</locationY>
+        <locationY>647</locationY>
         <connector>
             <targetReference>Get_Opportunity_Line_Items</targetReference>
         </connector>
@@ -248,11 +270,11 @@
     <recordLookups>
         <name>Contract_Id</name>
         <label>Contract Id</label>
-        <locationX>50</locationX>
+        <locationX>248</locationX>
         <locationY>431</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>Create_Order</targetReference>
+            <targetReference>is_Contarct_Availble</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
@@ -270,7 +292,7 @@
         <name>Get_Opportunity_Line_Items</name>
         <label>Get Opportunity Line Items</label>
         <locationX>50</locationX>
-        <locationY>647</locationY>
+        <locationY>755</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Loop_Through_Line_Items</targetReference>
@@ -288,7 +310,7 @@
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <start>
-        <locationX>122</locationX>
+        <locationX>353</locationX>
         <locationY>0</locationY>
         <connector>
             <targetReference>Check_for_Synced_Quote</targetReference>
